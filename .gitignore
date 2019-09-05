@@ -1,2 +1,6 @@
 cases/
 data/
+
+ __pycache__/
+
+*.pyc
