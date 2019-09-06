@@ -320,10 +320,13 @@ def predict_raw_probs_binding_catboost_ensemble_model(coded_seq_array, model_pre
     return probs_cum
 
 def predict_binding_catboost_ensemble_model(coded_seq_array, model_prefix, num_models=3):
+    probs_list = []
     probs_cum, _ = predict_binding_catboost_single_model(coded_seq_array, model_prefix, model_rank=1)
+    probs_list.append(probs_cum)
     for idx in range(1,num_models):
         probs_tmp, _ = predict_binding_catboost_single_model(coded_seq_array, model_prefix, model_rank=idx+1)
         probs_cum = np.add(probs_cum, probs_tmp)
+        probs_list.append(probs_tmp)
     probs_cum = probs_cum/num_models
     pred_cum = np.argmax(probs_cum, axis=1)
 
@@ -333,7 +336,8 @@ def predict_binding_catboost_ensemble_model(coded_seq_array, model_prefix, num_m
     dbg('pred_cum')
     dbg(pred_cum)
 
-    return probs_cum, pred_cum
+    #return probs_cum, pred_cum
+    return np.array(probs_list)
 
 def predict_probs_binding_catboost_ensemble_model(coded_seq_array, model_prefix, num_models=3):
     probs_cum, _ = predict_binding_catboost_ensemble_model(coded_seq_array, model_prefix, num_models)
