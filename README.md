@@ -42,11 +42,11 @@ Create a conda environment using the prodvided `environment.yml` file
 # Troubleshooting (Gotchas that most folks come across when working with your project)
 # Roadmap (Future changes you wish to add to your project)
 
-- [] use biopython to handle fasta files
+- [ ] use biopython to handle fasta files
 
-- [] change shapely plot to get rid of unecessary blank sequence positions or AAs
+- [ ] change shapely plot to get rid of unecessary blank sequence positions or AAs
 
-- [] remove hardcoded directories in plot\_auc\_ppvn.py
+- [ ] remove hardcoded directories in plot\_auc\_ppvn.py
 
 
 # License
