@@ -1,4 +1,4 @@
-name: shap
+name: pepcaat
 channels:
   - conda-forge
   - defaults
@@ -121,5 +121,4 @@ dependencies:
   - yaml=0.1.7
   - zlib=1.2.11
   - zstd=1.4.0
-prefix: /data/gaskinbj/conda/envs/shap
 
