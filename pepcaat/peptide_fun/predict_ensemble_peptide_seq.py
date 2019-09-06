@@ -462,6 +462,44 @@ def explain_shap_catboost_single_model_matrix(coded_seq_array, bind_list, model_
     idx_top_tp = df_pred_bind_true_sort.index[0]
     idx_top_fp = df_pred_bind_true_sort.index[-1]
 
+    dbg('coded_seq_array[:10,:]')
+    dbg(coded_seq_array[:10,:])
+
+    seq_str_tot_list = ['*','-', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+    dbg(seq_str_tot_list)
+    le = skp.LabelEncoder()
+    le.fit(seq_str_tot_list)
+
+    top_tp_seq = le.inverse_transform(coded_seq_array[idx_top_tp,:])
+    top_tp_seq_str = ''.join(top_tp_seq).replace("-","")
+    dbg('top_tp_seq_str')
+    dbg(top_tp_seq_str)
+
+    top_tn_seq = le.inverse_transform(coded_seq_array[idx_top_tn,:])
+    top_tn_seq_str = ''.join(top_tn_seq).replace("-","")
+    dbg('top_tn_seq_str')
+    dbg(top_tn_seq_str)
+
+    top_fp_seq = le.inverse_transform(coded_seq_array[idx_top_fp,:])
+    top_fp_seq_str = ''.join(top_fp_seq).replace("-","")
+    dbg('top_fp_seq_str')
+    dbg(top_fp_seq_str)
+
+    top_fn_seq = le.inverse_transform(coded_seq_array[idx_top_fn,:])
+    top_fn_seq_str = ''.join(top_fn_seq).replace("-","")
+    dbg('top_fn_seq_str')
+    dbg(top_fn_seq_str)
+
+    fo = open('seq_of_interest.txt','w')
+
+    fo.write('tn ' + top_tn_seq_str + '\n')
+    fo.write('tp ' + top_tp_seq_str + '\n')
+
+    fo.write('fn ' + top_fn_seq_str + '\n')
+    fo.write('fp ' + top_fp_seq_str + '\n')
+
+    fo.close()
+
     cat_idx = list(range(coded_seq_array.shape[1]))
 
     train_pool = Pool(data=df_seq_test,  cat_features=cat_idx)
