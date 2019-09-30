@@ -13,7 +13,7 @@
 ###########################################################################################
 ###########################################################################################
 ```
-# Description (Brief text on what the project is about)
+# Description
 
 PepcAAt is a peptide binding predictor using the machine learning technique, gradient boosting machine (GBM), implemented using the Catboost machine learning Python library. 
 
@@ -21,7 +21,7 @@ Using various independent test sets, PepcAAt achieved average area under the ROC
 
 Developed by Byron Gaskin
 
-# Dependencies (List of libs and tools the projects uses or need to run)
+# Dependencies 
 Conda should be used to handle all dependencies.
 
 Create a conda environment using the prodvided `environment.yml` file with the following command:
@@ -32,7 +32,7 @@ then activate the pepcAAt environment
 
     conda activate pepcaat
 
-# Getting Started (Steps to spin up the project)
+# Getting Started 
 
 ## Training Model:
 
@@ -55,9 +55,9 @@ Computing Shapely feature importance values for a trained model can be done usin
 
     python explain_allelle_model.py -p $path_to_allele_folder -a $allele_name -l $name_of_fasta_file -b $name_of_binding_file > explain_log.out
 
-# Contribution (Section on how to contribute and what not)
-# Troubleshooting (Gotchas that most folks come across when working with your project)
-# Roadmap (Future changes you wish to add to your project)
+# Contribution 
+# Troubleshooting 
+# Roadmap 
 
 - [ ] use biopython to handle fasta files
 
