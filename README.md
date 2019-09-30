@@ -52,6 +52,7 @@ After training model using hyperparameter optimization, `test_allelle_model.py` 
 ## Explain Model using Shap Values:
 
 Computing Shapely feature importance values for a trained model can be done using the `explain_allelle_model.py` script
+
     python explain_allelle_model.py -p $path_to_allele_folder -a $allele_name -l $name_of_fasta_file -b $name_of_binding_file > explain_log.out
 
 # Contribution (Section on how to contribute and what not)
