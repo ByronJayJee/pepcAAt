@@ -23,7 +23,7 @@ Developed by Byron Gaskin
 
 # Dependencies 
 
-In addition to conda (found at https://www.anaconda.com/distribution/), the following dependencies are required:
+In addition to conda (can be installed as part of the Anaconda package found at https://www.anaconda.com/distribution/), the following dependencies are required:
 
 ```
   - _tflow_select=2.1.0
