@@ -24,17 +24,32 @@ Developed by Byron Gaskin
 # Dependencies (List of libs and tools the projects uses or need to run)
 Conda should be used to handle all dependencies.
 
-Create a conda environment using the prodvided `environment.yml` file
+Create a conda environment using the prodvided `environment.yml` file with the following command:
+
+    conda env create -f environment.yml
+
+then activate the pepcAAt environment 
+
+    conda activate pepcaat
+
+
 
 # Getting Started (Steps to spin up the project)
 
 ## Training Model:
 
-### Training Single Model
-
 ### Training with hyperparameter optimization
 
-## Predict Binding Using Trained Model:
+Training an allele binding prediction model with hyperparameter optimization can be done using the `train_allelle_model.py` script
+
+    python train_allelle_model.py -p path_to_allele_folder -a allele_name -l name_of_fasta_file -b name_of_binding_file > training_log.out
+
+## Computing test metrics for trained models:
+
+After training model using hyperparameter optimization, `test_allelle_model.py` can be used to compute performance metrics (e.g., AUC, PPV\_n, precision)
+
+    python test_allelle_model.py -p path_to_allele_folder -a allele_name -l name_of_fasta_file -b name_of_binding_file > testing_log.out
+
 
 ## Explain Model using Shap Values:
 
