@@ -4,10 +4,11 @@ import numpy as np
 import pandas as pd
 import peptide_fun.predict_ensemble_peptide_seq as pfun
 import argparse
+import sys
 
 
 logging.basicConfig(level=logging.DEBUG, format=' %(asctime)s - %(levelname)s - \n%(message)s')
-#logging.disable(logging.CRITICAL)
+logging.disable(logging.CRITICAL)
 
 if __name__ == '__main__':
     # construct the argument parser and parse the arguments
@@ -70,6 +71,46 @@ if __name__ == '__main__':
 
     print('----Five Model Results----')
     probs_array = pfun.predict_binding_catboost_ensemble_model(coded_seq_array, num_models=5, model_prefix=model_prefix_str)
+    
+    dbg('probs_array')
+    dbg(probs_array)
+    
+    dbg('probs_array.shape')
+    dbg(probs_array.shape)
+
+    pnum_models = probs_array.shape[0]
+
+    new_probs_array = probs_array[0,:,:]
+
+    col_name = []
+
+    col_name.append('model-00_class-0')
+    col_name.append('model-00_class-1')
+
+    for idx in range(pnum_models-1):
+        tmp_probs = probs_array[idx+1,:,:]
+        
+        new_probs_array = np.hstack((new_probs_array,np.transpose(np.array([tmp_probs[:,0]]))))
+        new_probs_array = np.hstack((new_probs_array,np.transpose(np.array([tmp_probs[:,1]]))))
+        tmp_str = 'model-%02d' % (idx+1)
+        col_name.append(tmp_str + '_class-0')
+        col_name.append(tmp_str + '_class-1')
+
+    dbg('new_probs_array')
+    dbg(new_probs_array)
+
+    dbg('new_probs_array.shape')
+    dbg(new_probs_array.shape)
+
+    df_probs = pd.DataFrame(new_probs_array, columns=col_name)
+    dbg('df_probs')
+    dbg(df_probs)
+
+    df_probs.to_csv('multi_model_probs.csv')
+
+    dbg('col_name')
+    dbg(col_name)
+    
     model_auc_score, model_precision_score, ppvn, model_auc_score_ens, model_precision_score_ens, ppvn_ens = pfun.compute_metrics_multi_model(bind_list, probs_array)
     print('AUC Mean: %f' % np.mean(model_auc_score))
     print('AUC 5%% Quantile: %f' % np.quantile(model_auc_score, 0.05))
