@@ -41,7 +41,7 @@ if __name__ == '__main__':
     #model_prefix_str = 'catboost_model.allelle_._' + args["allelle"]
     
     #pfun.explain_shap_catboost_single_model(coded_seq_array, model_prefix=model_prefix_str)
-    pfun.explain_shap_catboost_single_model_matrix(coded_seq_array, bind_list, model_prefix=model_prefix_str)
+    pfun.explain_shap_catboost_single_model_matrix(coded_seq_array, bind_list, allelle_name=args["allelle"], model_prefix=model_prefix_str)
     #pfun.explain_shap_catboost_ensemble_model_matrix(coded_seq_array, model_prefix=model_prefix_str, num_models=10)
     
 

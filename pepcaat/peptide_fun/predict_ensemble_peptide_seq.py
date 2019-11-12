@@ -416,23 +416,32 @@ def pivot_seq_shap_dataframe(df_seq_test, shap_values):
     #array_seq_shap_tot = np.array(list_seq_shap_tot)
     return list_seq_shap_tot
 
-def explain_shap_catboost_single_model_matrix(coded_seq_array, bind_list, model_prefix, model_rank=1):
+def explain_shap_catboost_single_model_matrix(coded_seq_array, bind_list, model_prefix, allelle_name='unknown',  model_rank=1):
     ### This routine attempts to reshape the shap values into a format that allows to see average and standard deviation of shap values for protein sequences
     ### This approach should also extend to ensemble methods in more straightforward way
+
+    # Load Model
     tmp_str = '.rank_._%d.bin' % (model_rank)
     tmp_str = model_prefix + tmp_str
     model_tmp = CatBoostClassifier()
     model_tmp.load_model(tmp_str)
+    
+    # Read sequences and binding lists
     df_seq_test = pd.DataFrame(coded_seq_array)
     bind_list_array = np.array(bind_list)
 
+    # get model prediction for probability of binding
     probs = model_tmp.predict_proba(data=df_seq_test)
     dbg("probs")
     dbg(probs)
 
+    # combine model prediction and ground truth into one array
     df_pred = pd.DataFrame({'pred':probs[:,1], 'true':bind_list_array})
     #df_pred_sort = df_pred.sort_values(by=['pred'], ascending=False)
+
+    # Grab sequences that bind and sort them by prediction probability
     df_pred_bind_true_sort  = df_pred[df_pred['true']==1].sort_values(by=['pred'], ascending=False)
+    # Grab sequences that DO NOT bind and sort them by prediction probability
     df_pred_bind_false_sort = df_pred[df_pred['true']==0].sort_values(by=['pred'], ascending=False)
 
     dbg('df_pred_bind_true_sort.head()')
@@ -492,11 +501,11 @@ def explain_shap_catboost_single_model_matrix(coded_seq_array, bind_list, model_
 
     fo = open('seq_of_interest.txt','w')
 
-    fo.write('tn ' + top_tn_seq_str + '\n')
-    fo.write('tp ' + top_tp_seq_str + '\n')
+    fo.write(allelle_name + ' tn ' + top_tn_seq_str + '\n')
+    fo.write(allelle_name + ' tp ' + top_tp_seq_str + '\n')
 
-    fo.write('fn ' + top_fn_seq_str + '\n')
-    fo.write('fp ' + top_fp_seq_str + '\n')
+    fo.write(allelle_name + ' fn ' + top_fn_seq_str + '\n')
+    fo.write(allelle_name + ' fp ' + top_fp_seq_str + '\n')
 
     fo.close()
 
@@ -640,6 +649,8 @@ def explain_shap_catboost_single_model_matrix(coded_seq_array, bind_list, model_
     dbg('t_mean_array_seq_shap_tot.shape')
     dbg(t_mean_array_seq_shap_tot.shape)
 
+    sys.exit()
+
     dummy_label = [idx for idx in range(15)]
 
     #tmp_seq_test = [ [itmp for idx in range(29)] for itmp in range(15)]
@@ -660,12 +671,10 @@ def explain_shap_catboost_single_model_matrix(coded_seq_array, bind_list, model_
     dbg('tp_array_seq_shap.shape')
     dbg(tp_array_seq_shap.shape)
     
-    make_peptide_shap_plot(df_seq_test_tmp, tp_array_seq_shap, plot_title='A*02:01 - True Positive', plot_colormap="coolwarm_r", plot_filename="tp.png")
-    make_peptide_shap_plot(df_seq_test_tmp, fp_array_seq_shap, plot_title='A*02:01 - False Positive', plot_colormap="coolwarm_r", plot_filename="fp.png")
-    make_peptide_shap_plot(df_seq_test_tmp, tn_array_seq_shap, plot_title='A*02:01 - True Negative', plot_colormap="coolwarm_r", plot_filename="tn.png")
-    make_peptide_shap_plot(df_seq_test_tmp, fn_array_seq_shap, plot_title='A*02:01 - False Negative', plot_colormap="coolwarm_r", plot_filename="fn.png")
-
-    sys.exit()
+    make_peptide_shap_plot(df_seq_test_tmp, tp_array_seq_shap, plot_title=allelle_name+' - True Positive', plot_colormap="coolwarm_r", plot_filename="tp.png")
+    make_peptide_shap_plot(df_seq_test_tmp, fp_array_seq_shap, plot_title=allelle_name+' - False Positive', plot_colormap="coolwarm_r", plot_filename="fp.png")
+    make_peptide_shap_plot(df_seq_test_tmp, tn_array_seq_shap, plot_title=allelle_name+' - True Negative', plot_colormap="coolwarm_r", plot_filename="tn.png")
+    make_peptide_shap_plot(df_seq_test_tmp, fn_array_seq_shap, plot_title=allelle_name+' - False Negative', plot_colormap="coolwarm_r", plot_filename="fn.png")
 
     ### Only keep top 2 AAs per position
     for idx in range(15):
